@@ -41,7 +41,12 @@
 
 数据库设计，造数据：100w用户，1000w商品（大表），500w商品（小表），100w用户的银行账户余额
 
-
+安装Nacos
+```
+docker pull nacos/nacos-server
+// todo 映射配置文件，配置数据库持久化。
+docker run -d --name nacos -p 8848:8848 -e PREFER_HOST_MODE=hostname -e MODE=standalone nacos/nacos-server
+```
 
 ## Todo List
 
