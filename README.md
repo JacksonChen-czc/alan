@@ -35,20 +35,43 @@
 
 ![image-20220713150314241](https://jack-pic.oss-cn-hangzhou.aliyuncs.com/doc/image/image-20220713150314241.png)
 
-搭建项目架子：模拟客户端mock-client，通用模块common，用户模块account，商品模块goods，银行模块bank，商品（分库分表）goods-dis
 
-> 参考[GuoHuaijian/SpringCloudAlibaba](https://github.com/GuoHuaijian/SpringCloudAlibaba)
 
-数据库设计，造数据：100w用户，1000w商品（大表），500w商品（小表），100w用户的银行账户余额
+> 参考
+>
+> [GuoHuaijian/SpringCloudAlibaba](https://github.com/GuoHuaijian/SpringCloudAlibaba)
+>
+> [Nacos Spring Cloud 快速开始](https://nacos.io/zh-cn/docs/quick-start-spring-cloud.html)
 
-安装Nacos
-```
+安装Nacos，自行百度。
+```shell
 docker pull nacos/nacos-server
-// todo 映射配置文件，配置数据库持久化。
-docker run -d --name nacos -p 8848:8848 -e PREFER_HOST_MODE=hostname -e MODE=standalone nacos/nacos-server
+// 配置数据库持久化，映射日志和数据文件
+docker run -it \
+-e MODE=standalone \
+-v /home/docker/nacos/conf/application.properties:/home/nacos/conf/application.properties \
+-v /home/docker/nacos/logs:/home/nacos/logs \
+-v /home/docker/nacos/data:/home/nacos/data \
+--restart=always \
+--name nacos \
+-p 8848:8848 \
+nacos/nacos-server
 ```
+
+踩坑：
+
+1. 官方源码安装方式，编译报错：使用docker镜像解决
+2. 拉取lasted版本的镜像，无法添加配置：使用指定版本nacos/nacos-server:v2.1.0-BETA解决
+
+### Day2
+
+实现配置拉取和服务注册
+
+> 参考[Nacos Examples](https://github.com/nacos-group/nacos-examples)
 
 ## Todo List
 
+- 搭建项目架子：模拟客户端mock-client，通用模块common，用户模块account，商品模块goods，银行模块bank，商品（分库分表）goods-dis
+- 数据库设计，造数据：100w用户，1000w商品（大表），500w商品（小表），100w用户的银行账户余额
 - 调用模拟客户端**接口**触发并发调用，考虑使用redis广播，部署多个客户端实例增加并发数，每个客户端可配置并发数量。
 - 高并发客户端使用模板设计模式，固定用户故事流程：查用户信息-查商品列表-查商品详情-抢购-下单。不同的实现类调用不同的底层和服务分布式技术实现接口。
