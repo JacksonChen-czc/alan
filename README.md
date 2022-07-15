@@ -67,6 +67,12 @@ nacos/nacos-server
 
 实现配置拉取和服务注册
 
+### Day3
+
+接入Feign，实现服务间调用
+
+接入admin，实现服务运行监控
+
 > 参考[Nacos Examples](https://github.com/nacos-group/nacos-examples)
 
 ## Todo List
