@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/test")
 @RefreshScope
-public class Test {
+public class TestController {
 
     @Value("${testkey:default}")
     private String testkey;
@@ -24,7 +24,7 @@ public class Test {
     @Resource
     private RemoteAccountApi remoteAccountApi;
 
-    @GetMapping
+    @GetMapping("/test")
     public String test() {
         System.out.println("value : " + testkey);
         String s = remoteAccountApi.accountDetail();

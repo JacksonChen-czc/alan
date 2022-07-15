@@ -10,6 +10,7 @@
         <module>alan-common</module>
         <module>alan-account</module>
         <module>alan-mock-client</module>
+        <module>alan-admin</module>
     </modules>
     <name>alan</name>
     <description>Demo project for Spring Boot</description>
@@ -21,10 +22,21 @@
         <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
         <spring-cloud-alibaba.version>2.2.2.RELEASE</spring-cloud-alibaba.version>
         <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
+        <spring-boot-admin.version>2.2.2</spring-boot-admin.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-server</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
             <dependency>
                 <groupId>cn.chenzecheng</groupId>
                 <artifactId>alan-account-api</artifactId>
