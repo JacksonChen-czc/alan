@@ -1,17 +1,19 @@
-package cn.chenzecheng.alan.mockclient;
+package cn.chenzecheng.alan.account;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
+/**
+ * @author JacksonChen
+ * @date 2022/7/15 21:09
+ */
 @EnableDiscoveryClient
 @SpringBootApplication
-@EnableFeignClients(basePackages = {"cn.chenzecheng.alan.account"})
-public class AlanMockClientApplication {
+public class AlanAccountApplication {
+
 
     public static void main(String[] args) {
-        SpringApplication.run(AlanMockClientApplication.class, args);
+        SpringApplication.run(AlanAccountApplication.class, args);
     }
-
 }
