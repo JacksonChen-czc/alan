@@ -9,8 +9,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @author JacksonChen
  */
 @EnableDiscoveryClient
-@SpringBootApplication
-@EnableFeignClients(basePackages = {"cn.chenzecheng.alan.account"})
+@SpringBootApplication(scanBasePackages = "cn.chenzecheng.alan")
+@EnableFeignClients(basePackages = "cn.chenzecheng.alan")
 public class AlanMockClientApplication {
 
     public static void main(String[] args) {

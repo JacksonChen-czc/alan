@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  *
  * @author JacksonChen
  */
-@FeignClient(name = "alan-account")
+@FeignClient(name = "alan-account", fallbackFactory = RemoteAccountApiFallbackFactory.class)
 public interface RemoteAccountApi {
 
     /**
