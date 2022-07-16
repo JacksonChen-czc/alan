@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  * @date 2022/7/14 22:26
  */
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/client/test")
 @RefreshScope
 public class TestController {
 
@@ -24,11 +24,16 @@ public class TestController {
     @Resource
     private RemoteAccountApi remoteAccountApi;
 
-    @GetMapping("/test")
-    public String test() {
+    @GetMapping("/value")
+    public String value() {
         System.out.println("value : " + testkey);
+        return testkey;
+    }
+
+    @GetMapping("/feign")
+    public String feign() {
         String s = remoteAccountApi.accountDetail();
         System.out.println(s);
-        return testkey;
+        return s;
     }
 }

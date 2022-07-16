@@ -75,6 +75,28 @@ nacos/nacos-server
 
 > 参考[Nacos Examples](https://github.com/nacos-group/nacos-examples)
 
+### Day4
+
+使用docker部署jar包。这是不构建镜像的方式，不需要在项目中写Dockerfile，运行时去掉所有的#备注。
+
+```dockerfile
+docker pull java:8
+
+# 后台运行，命名
+docker run -d --name sentinel \
+-p 8080:8080 \
+# 映射jar文件位置
+-v /home/sentinel/sentinel-dashboard-1.8.4.jar:/jarfile/app.jar \
+# 运行镜像
+java:8 \
+# jar运行命令
+java -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject.name=sentinel-dashboard -jar /jarfile/app.jar
+```
+
+这种方式的好处是，如果代码变更，更换jar之后，重启容器即可，不需要修改容器脚本。
+
+安装sentinel服务端，服务接入sentinel（注意sentinel需要和服务能互相请求，不然无法正常工作。）
+
 ## Todo List
 
 - 搭建项目架子：模拟客户端mock-client，通用模块common，用户模块account，商品模块goods，银行模块bank，商品（分库分表）goods-dis

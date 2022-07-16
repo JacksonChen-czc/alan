@@ -5,6 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
+/**
+ * @author JacksonChen
+ */
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableFeignClients(basePackages = {"cn.chenzecheng.alan.account"})
