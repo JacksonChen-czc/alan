@@ -11,6 +11,7 @@
         <module>alan-account</module>
         <module>alan-mock-client</module>
         <module>alan-admin</module>
+        <module>alan-generator</module>
     </modules>
     <name>alan</name>
     <description>Demo project for Spring Boot</description>
@@ -24,10 +25,42 @@
         <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
         <spring-boot-admin.version>2.2.2</spring-boot-admin.version>
         <sentinel.version>0.9.0.RELEASE</sentinel.version>
+        <mybatis-plus-boot-starter.version>3.5.2</mybatis-plus-boot-starter.version>
+        <mybatis-plus-generator.version>3.5.3</mybatis-plus-generator.version>
+        <mysql-connector-java.version>8.0.29</mysql-connector-java.version>
+        <velocity-engine-core.version>2.2</velocity-engine-core.version>
+        <swagger.version>1.5.1.RELEASE</swagger.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.spring4all</groupId>
+                <artifactId>spring-boot-starter-swagger</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <!--代码生成模板-->
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity-engine-core</artifactId>
+                <version>${velocity-engine-core.version}</version>
+            </dependency>
+            <!--mysql驱动-->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus-generator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus-boot-starter.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
