@@ -97,6 +97,27 @@ java -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject
 
 安装sentinel服务端，服务接入sentinel（注意sentinel需要和服务能互相请求，不然无法正常工作。）
 
+### Day5
+
+接入mybatis-plus，使用代码生成器生成代码。
+
+设计账号数据库
+
+```sql
+CREATE TABLE `t_account` (
+  `account_id` bigint(20) unsigned NOT NULL COMMENT '账号id',
+  `account_no` varchar(32) NOT NULL COMMENT '用户账号',
+  `account_name` varchar(32) NOT NULL COMMENT '用户名称',
+  `account_mobile` varchar(16) NOT NULL COMMENT '用户手机号',
+  `account_gender` tinyint(3) unsigned NOT NULL COMMENT '用户性别，0未知，1男，2女',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`account_id`),
+  KEY `idx_account_no` (`account_no`) USING HASH COMMENT '用户账号索引',
+  KEY `idx_account_mobile` (`account_mobile`) USING HASH COMMENT '用户手机索引'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
 ## Todo List
 
 - 搭建项目架子：模拟客户端mock-client，通用模块common，用户模块account，商品模块goods，银行模块bank，商品（分库分表）goods-dis
