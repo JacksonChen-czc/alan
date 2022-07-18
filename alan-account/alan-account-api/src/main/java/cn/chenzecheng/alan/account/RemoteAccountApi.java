@@ -7,6 +7,8 @@ import cn.chenzecheng.alan.common.bean.MyResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * 账号接口api
@@ -19,14 +21,18 @@ public interface RemoteAccountApi {
     /**
      * 获取账号详情
      *
+     * @param id
      * @return
      */
-    @GetMapping(value = "/account/detail")
-    String accountDetail();
+    @GetMapping("/account/detail/{id}")
+    MyResult<AccountResp> detail(@PathVariable(value = "id") Long id);
 
-    @GetMapping("/detail/{id}")
-    MyResult<AccountResp> detail(@PathVariable(value = "id") String id);
-
-    @GetMapping("/list")
-    MyPageResult<AccountResp> list(AccountListRep rep);
+    /**
+     * 获取账号列表
+     *
+     * @param rep
+     * @return
+     */
+    @PostMapping("/account/list")
+    MyPageResult<AccountResp> list(@RequestBody AccountListRep rep);
 }

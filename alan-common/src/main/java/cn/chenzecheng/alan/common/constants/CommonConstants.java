@@ -8,9 +8,9 @@ public class CommonConstants {
 
     public static final int ONE_HUNDRED = 100;
 
-    public static final int RANDOM_EXCEPTION_RATIO = 10;
+    public static final int RANDOM_EXCEPTION_RATIO = 1;
 
-    public static final int RANDOM_SLEEP_RATIO = 10;
+    public static final int RANDOM_SLEEP_RATIO = 1;
 
     public static final int RANDOM_SLEEP_TIME = 500;
 }

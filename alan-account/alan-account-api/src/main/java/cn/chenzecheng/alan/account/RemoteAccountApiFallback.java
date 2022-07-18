@@ -20,12 +20,7 @@ public class RemoteAccountApiFallback implements RemoteAccountApi {
     }
 
     @Override
-    public String accountDetail() {
-        return "获取账号信息异常:" + throwable.getMessage();
-    }
-
-    @Override
-    public MyResult<AccountResp> detail(String id) {
+    public MyResult<AccountResp> detail(Long id) {
         log.error("获取账号详情异常", throwable);
         return null;
     }

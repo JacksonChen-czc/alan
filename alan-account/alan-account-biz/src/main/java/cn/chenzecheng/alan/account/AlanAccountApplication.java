@@ -1,6 +1,6 @@
 package cn.chenzecheng.alan.account;
 
-import org.mybatis.spring.annotation.MapperScan;
+import com.mzt.logapi.starter.annotation.EnableLogRecord;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -10,10 +10,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @date 2022/7/15 21:09
  */
 @EnableDiscoveryClient
-@SpringBootApplication
-@MapperScan("cn.chenzecheng.alan.account.mapper")
+@SpringBootApplication(scanBasePackages = "cn.chenzecheng.alan")
+@EnableLogRecord(tenant = "cn.chenzecheng.alan")
 public class AlanAccountApplication {
-
 
     public static void main(String[] args) {
         SpringApplication.run(AlanAccountApplication.class, args);

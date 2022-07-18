@@ -1,6 +1,7 @@
 package cn.chenzecheng.alan.common.util;
 
 import cn.chenzecheng.alan.common.constants.CommonConstants;
+import cn.chenzecheng.alan.common.exception.BizException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +27,7 @@ public class RandomExceptionUtil {
     private static void randomException() {
         if (random.nextInt(CommonConstants.ONE_HUNDRED) < CommonConstants.RANDOM_EXCEPTION_RATIO) {
             log.warn("发生了随机异常");
-            throw new RuntimeException("发生随机异常。");
+            throw new BizException("发生随机异常。");
         }
     }
 
