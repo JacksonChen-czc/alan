@@ -1,5 +1,7 @@
 package cn.chenzecheng.alan.account.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
@@ -21,6 +23,7 @@ public class Account implements Serializable {
     /**
      * 账号id
      */
+    @TableId(value = "account_id", type = IdType.ASSIGN_ID)
     private Long accountId;
 
     /**
