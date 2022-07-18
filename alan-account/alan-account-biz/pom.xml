@@ -17,6 +17,10 @@
             <groupId>cn.chenzecheng</groupId>
             <artifactId>alan-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.chenzecheng</groupId>
+            <artifactId>alan-account-api</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
