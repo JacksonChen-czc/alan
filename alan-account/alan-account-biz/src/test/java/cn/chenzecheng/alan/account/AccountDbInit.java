@@ -41,7 +41,7 @@ public class AccountDbInit {
 
     @Test
     public void batchInsertAccount() {
-        // 生成100w的账号，8线程大概需要15分钟，可以根据性能自助调整
+        // 生成100w的账号，16线程大概需要3分钟，可以根据性能自助调整
         /* 数据库连接增加 rewriteBatchedStatements=true 参数，可以大量提升批量插入的效率，*/
         long start = System.currentTimeMillis();
         for (int i = 0; i < 100; i++) {
