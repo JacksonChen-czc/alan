@@ -1,4 +1,4 @@
-package cn.chenzecheng.alan.account.bean;
+package cn.chenzecheng.alan.goods.bean;
 
 import cn.chenzecheng.alan.common.bean.BasePageReq;
 import lombok.Data;
@@ -12,9 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class AccountListRep extends BasePageReq {
+public class GoodsListRep extends BasePageReq {
 
     private String name;
-    private String no;
-    private String mobile;
 }

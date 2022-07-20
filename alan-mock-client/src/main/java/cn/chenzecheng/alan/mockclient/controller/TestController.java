@@ -5,6 +5,9 @@ import cn.chenzecheng.alan.account.bean.AccountListRep;
 import cn.chenzecheng.alan.account.bean.AccountResp;
 import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.bean.MyResult;
+import cn.chenzecheng.alan.goods.RemoteGoodsApi;
+import cn.chenzecheng.alan.goods.bean.GoodsListRep;
+import cn.chenzecheng.alan.goods.bean.GoodsResp;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +35,9 @@ public class TestController {
     @Resource
     private RemoteAccountApi remoteAccountApi;
 
+    @Resource
+    private RemoteGoodsApi remoteGoodsApi;
+
     @GetMapping("/value")
     public String value() {
         System.out.println("value : " + testkey);
@@ -46,6 +52,19 @@ public class TestController {
         List<AccountResp> data = result.getData();
         for (AccountResp account : data) {
             MyResult<AccountResp> detail = remoteAccountApi.detail(account.getAccountId());
+        }
+        log.info("detail:{}", JSON.toJSONString(result));
+        return result;
+    }
+
+    @GetMapping("/goods")
+    public MyPageResult<GoodsResp> getGoods(int size) {
+        GoodsListRep rep = new GoodsListRep();
+        rep.setSize(size);
+        MyPageResult<GoodsResp> result = remoteGoodsApi.list(rep);
+        List<GoodsResp> data = result.getData();
+        for (GoodsResp goods : data) {
+            MyResult<AccountResp> detail = remoteAccountApi.detail(goods.getGoodsId());
         }
         log.info("detail:{}", JSON.toJSONString(result));
         return result;

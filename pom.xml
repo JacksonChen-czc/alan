@@ -12,6 +12,7 @@
         <module>alan-mock-client</module>
         <module>alan-admin</module>
         <module>alan-generator</module>
+        <module>alan-goods</module>
     </modules>
     <name>alan</name>
     <description>Demo project for Spring Boot</description>
@@ -43,6 +44,11 @@
                 <groupId>io.github.mouzt</groupId>
                 <artifactId>bizlog-sdk</artifactId>
                 <version>${bizlog-sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.chenzecheng</groupId>
+                <artifactId>alan-goods-api</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.chenzecheng</groupId>

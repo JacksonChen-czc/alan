@@ -22,12 +22,12 @@ public class RemoteAccountApiFallback implements RemoteAccountApi {
     @Override
     public MyResult<AccountResp> detail(Long id) {
         log.error("获取账号详情异常", throwable);
-        return null;
+        return MyResult.error("获取账号详情异常");
     }
 
     @Override
     public MyPageResult<AccountResp> list(AccountListRep rep) {
         log.error("获取账号列表异常", throwable);
-        return null;
+        return MyPageResult.error("获取账号列表异常");
     }
 }
