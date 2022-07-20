@@ -2,6 +2,7 @@ package cn.chenzecheng.alan.common.exception;
 
 import cn.chenzecheng.alan.common.bean.MyResult;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,7 +27,14 @@ public class MyExceptionHandler {
     @ExceptionHandler(value = BlockException.class)
     @ResponseBody
     public MyResult<Void> blockExceptionHandler(BlockException e) {
-        log.warn("捕获到熔断异常", e);
+        log.warn("捕获到sentinel熔断异常", e);
+        return MyResult.error("熔断异常：" + e.getMessage());
+    }
+
+    @ExceptionHandler(value = FeignException.class)
+    @ResponseBody
+    public MyResult<Void> feignExceptionHandler(FeignException e) {
+        log.warn("捕获到feign熔断异常", e);
         return MyResult.error("熔断异常：" + e.getMessage());
     }
 

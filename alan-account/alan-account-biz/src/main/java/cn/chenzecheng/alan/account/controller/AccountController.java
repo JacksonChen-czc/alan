@@ -15,7 +15,6 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import com.alibaba.nacos.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mzt.logapi.starter.annotation.LogRecord;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +40,6 @@ public class AccountController {
     @Resource
     private IAccountService accountService;
 
-    @LogRecord(success = "查询用户详情，参数「{{#id}}」,结果:{{#_ret}}", type = "account", bizNo = "{{#id}}")
     @GetMapping("/detail/{id}")
     public MyResult<AccountResp> detail(@PathVariable Long id) {
         RandomExceptionUtil.randomExAndSleep();
@@ -50,7 +48,6 @@ public class AccountController {
         return MyResult.ok(BeanUtil.copyProperties(byId, AccountResp.class));
     }
 
-    @LogRecord(success = "查询用户列表，参数「{{#rep}}」,结果:{{#_ret}}", type = "account", bizNo = "account-list")
     @PostMapping("/list")
     public MyPageResult<AccountResp> list(@RequestBody AccountListRep rep) {
         RandomExceptionUtil.randomExAndSleep();

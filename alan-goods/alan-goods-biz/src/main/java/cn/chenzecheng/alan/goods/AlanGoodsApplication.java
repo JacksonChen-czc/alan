@@ -1,6 +1,5 @@
 package cn.chenzecheng.alan.goods;
 
-import com.mzt.logapi.starter.annotation.EnableLogRecord;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -11,7 +10,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  */
 @EnableDiscoveryClient
 @SpringBootApplication(scanBasePackages = "cn.chenzecheng.alan")
-@EnableLogRecord(tenant = "cn.chenzecheng.alan")
 public class AlanGoodsApplication {
 
     public static void main(String[] args) {

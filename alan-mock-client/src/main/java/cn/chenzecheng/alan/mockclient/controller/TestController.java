@@ -8,7 +8,6 @@ import cn.chenzecheng.alan.common.bean.MyResult;
 import cn.chenzecheng.alan.goods.RemoteGoodsApi;
 import cn.chenzecheng.alan.goods.bean.GoodsListRep;
 import cn.chenzecheng.alan.goods.bean.GoodsResp;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -53,7 +52,6 @@ public class TestController {
         for (AccountResp account : data) {
             MyResult<AccountResp> detail = remoteAccountApi.detail(account.getAccountId());
         }
-        log.info("detail:{}", JSON.toJSONString(result));
         return result;
     }
 
@@ -64,9 +62,8 @@ public class TestController {
         MyPageResult<GoodsResp> result = remoteGoodsApi.list(rep);
         List<GoodsResp> data = result.getData();
         for (GoodsResp goods : data) {
-            MyResult<AccountResp> detail = remoteAccountApi.detail(goods.getGoodsId());
+            MyResult<GoodsResp> detail = remoteGoodsApi.detail(goods.getGoodsId());
         }
-        log.info("detail:{}", JSON.toJSONString(result));
         return result;
     }
 }

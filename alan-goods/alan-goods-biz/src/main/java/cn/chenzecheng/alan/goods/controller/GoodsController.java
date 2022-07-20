@@ -15,6 +15,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,12 +37,14 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/goods")
+@Slf4j
 public class GoodsController {
 
     @Resource
     private IGoodsService goodsService;
     @Resource
     private IStockService stockService;
+
 
     @GetMapping("/detail/{id}")
     public MyResult<GoodsResp> detail(@PathVariable Long id) {
