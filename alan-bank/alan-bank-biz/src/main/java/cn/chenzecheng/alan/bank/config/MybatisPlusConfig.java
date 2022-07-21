@@ -1,4 +1,4 @@
-package cn.chenzecheng.alan.goods.config;
+package cn.chenzecheng.alan.bank.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

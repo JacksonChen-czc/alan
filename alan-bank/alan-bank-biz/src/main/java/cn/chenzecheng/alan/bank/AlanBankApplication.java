@@ -1,4 +1,4 @@
-package cn.chenzecheng.alan.goods;
+package cn.chenzecheng.alan.bank;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

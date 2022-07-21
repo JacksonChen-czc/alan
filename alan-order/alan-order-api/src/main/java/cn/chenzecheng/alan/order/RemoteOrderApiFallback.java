@@ -1,4 +1,4 @@
-package cn.chenzecheng.alan.goods;
+package cn.chenzecheng.alan.order;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -7,11 +7,11 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2022/7/16 16:42
  */
 @Slf4j
-public class RemoteBankApiFallback implements RemoteBankApi {
+public class RemoteOrderApiFallback implements RemoteOrderApi {
 
     private Throwable throwable;
 
-    public RemoteBankApiFallback(Throwable throwable) {
+    public RemoteOrderApiFallback(Throwable throwable) {
         this.throwable = throwable;
     }
 

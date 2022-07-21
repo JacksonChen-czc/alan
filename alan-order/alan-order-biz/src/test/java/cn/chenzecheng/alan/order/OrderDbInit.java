@@ -1,4 +1,4 @@
-package cn.chenzecheng.alan.goods;
+package cn.chenzecheng.alan.order;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2022/7/19 22:03
  */
 @SpringBootTest
-public class BankDbInit {
+public class OrderDbInit {
 
 
     private ExecutorService threadPool = new ThreadPoolExecutor(16, 32, 10L, TimeUnit.MILLISECONDS,

@@ -1,4 +1,4 @@
-package cn.chenzecheng.alan.goods.controller;
+package cn.chenzecheng.alan.order.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2022-07-19
  */
 @RestController
-@RequestMapping("/bank")
+@RequestMapping("/order")
 @Slf4j
-public class BankController {
+public class OrderController {
 
 
 }

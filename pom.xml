@@ -42,6 +42,11 @@
         <dependencies>
             <dependency>
                 <groupId>cn.chenzecheng</groupId>
+                <artifactId>alan-order-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.chenzecheng</groupId>
                 <artifactId>alan-bank-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
