@@ -38,4 +38,8 @@ public class MyPageInfo {
         this.pages = pages;
         this.total = total;
     }
+
+    public boolean hasNext() {
+        return this.pageNum < pages;
+    }
 }

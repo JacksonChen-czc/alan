@@ -1,8 +1,25 @@
 package cn.chenzecheng.alan.order;
 
+import cn.chenzecheng.alan.account.RemoteAccountApi;
+import cn.chenzecheng.alan.account.bean.AccountListRep;
+import cn.chenzecheng.alan.account.bean.AccountResp;
+import cn.chenzecheng.alan.common.bean.MyPageResult;
+import cn.chenzecheng.alan.common.exception.BizException;
+import cn.chenzecheng.alan.goods.RemoteGoodsApi;
+import cn.chenzecheng.alan.goods.bean.GoodsListRep;
+import cn.chenzecheng.alan.goods.bean.GoodsResp;
+import cn.chenzecheng.alan.order.entity.Order;
+import cn.chenzecheng.alan.order.entity.OrderGoods;
+import cn.chenzecheng.alan.order.enums.OrderStatusEnum;
+import cn.chenzecheng.alan.order.service.IOrderGoodsService;
+import cn.chenzecheng.alan.order.service.IOrderService;
+import cn.hutool.core.collection.CollUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -15,7 +32,19 @@ import java.util.concurrent.TimeUnit;
  * @date 2022/7/19 22:03
  */
 @SpringBootTest
+@Slf4j
 public class OrderDbInit {
+
+    @Resource
+    private IOrderGoodsService orderGoodsService;
+
+    @Resource
+    private IOrderService orderService;
+
+    @Resource
+    private RemoteAccountApi remoteAccountApi;
+    @Resource
+    private RemoteGoodsApi remoteGoodsApi;
 
 
     private ExecutorService threadPool = new ThreadPoolExecutor(16, 32, 10L, TimeUnit.MILLISECONDS,
@@ -23,33 +52,29 @@ public class OrderDbInit {
 
     @Test
     public void insert() {
-    }
-
-    @Test
-    public void insertBatch() {
-        // 生成100w的商品，16线程大概需要20分钟，可以根据性能自助调整
-        /* 数据库连接增加 rewriteBatchedStatements=true 参数，可以大量提升批量插入的效率，*/
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < 1000; i++) {
-            int finalI = i;
-            threadPool.submit(() -> {
-                long start1 = System.currentTimeMillis();
-                int size = 1000;
-
-                long end1 = System.currentTimeMillis();
-                System.out.println("第【" + finalI + "】批商品插入完成，数量：" + size + "，耗时：" + (end1 - start1));
-            });
+        MyPageResult<AccountResp> accountResult = remoteAccountApi.list(new AccountListRep());
+        if (CollUtil.isEmpty(accountResult.getData())) {
+            log.warn("请先初始化账号数据");
+            throw new BizException("请先初始化账号数据");
         }
-        threadPool.shutdown();
-        while (!threadPool.isTerminated()) {
-            System.out.println("任务未完成，继续等待...");
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        MyPageResult<GoodsResp> goodsResult = remoteGoodsApi.list(new GoodsListRep());
+        if (CollUtil.isEmpty(goodsResult.getData())) {
+            log.warn("请先初始化商品数据");
+            throw new BizException("请先初始化商品数据");
         }
-        long end = System.currentTimeMillis();
-        System.out.println("线程池执行任务结束，耗时：" + (end - start));
+        GoodsResp goodsResp = goodsResult.getData().get(0);
+        AccountResp accountResp = accountResult.getData().get(0);
+        Order order = new Order();
+        order.setAccountId(accountResp.getAccountId());
+        order.setOrderPrice(goodsResp.getGoodsPrice());
+        order.setOrderStatus(OrderStatusEnum.CREATED.getCode());
+        orderService.save(order);
+
+        OrderGoods orderGoods = new OrderGoods();
+        orderGoods.setOrderId(order.getOrderId());
+        orderGoods.setGoodsId(goodsResp.getGoodsId());
+        orderGoods.setAmount(1);
+        orderGoods.setGoodsPriceSum(goodsResp.getGoodsPrice().multiply(new BigDecimal(1)));
+        orderGoodsService.save(orderGoods);
     }
 }

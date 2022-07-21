@@ -13,10 +13,13 @@ public class MybatisPlusGenerator {
 
     public static void main(String[] args) {
         // 更换配置，进行代码生成
-        String ipPort = "xxxxx:3306";
-        String dataBaseName = "alan_goods";
-        String username = "alan_goods";
-        String password = "xxxxxxx";
+        String ipPort = "42.194.206.95:3306";
+        String dataBaseName = "alan_bank";
+        String username = "alan_bank";
+        String password = "5HDdzsH2fikXzbP7";
+
+        String moduleName = "bank";
+        String[] tables = {"t_bank_account"};
 
         String url = "jdbc:mysql://" + ipPort + "/" + dataBaseName + "?useUnicode=true&characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true&serverTimezone=Asia/Shanghai";
         FastAutoGenerator.create(url, username, password)
@@ -34,13 +37,13 @@ public class MybatisPlusGenerator {
                     // 设置父包名
                     builder.parent("cn.chenzecheng.alan")
                             // 设置父包模块名
-                            .moduleName("goods")
+                            .moduleName(moduleName)
                             // 设置mapperXml生成路径
                             .pathInfo(Collections.singletonMap(OutputFile.xml, "D://codeGen/mapper"));
                 })
                 .strategyConfig(builder -> {
                     // 设置需要生成的表名
-                    builder.addInclude("t_goods", "t_stock")
+                    builder.addInclude(tables)
                             // 设置过滤表前缀
                             .addTablePrefix("t_");
                 })
