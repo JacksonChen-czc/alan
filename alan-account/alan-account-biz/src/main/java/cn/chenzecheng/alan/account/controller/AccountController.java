@@ -9,7 +9,6 @@ import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.bean.MyResult;
 import cn.chenzecheng.alan.common.enums.MyErrorEnum;
 import cn.chenzecheng.alan.common.exception.MyAssertUtil;
-import cn.chenzecheng.alan.common.util.RandomExceptionUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.alibaba.nacos.common.utils.StringUtils;
@@ -42,7 +41,7 @@ public class AccountController {
 
     @GetMapping("/detail/{id}")
     public MyResult<AccountResp> detail(@PathVariable Long id) {
-        RandomExceptionUtil.randomExAndSleep();
+//        RandomExceptionUtil.randomExAndSleep();
         Account byId = accountService.getById(id);
         MyAssertUtil.notNull(byId, MyErrorEnum.NOT_EXIST);
         return MyResult.ok(BeanUtil.copyProperties(byId, AccountResp.class));
@@ -50,7 +49,7 @@ public class AccountController {
 
     @PostMapping("/list")
     public MyPageResult<AccountResp> list(@RequestBody AccountListRep rep) {
-        RandomExceptionUtil.randomExAndSleep();
+//        RandomExceptionUtil.randomExAndSleep();
         LambdaQueryWrapper<Account> wrapper = new LambdaQueryWrapper<>();
         if (StringUtils.isNotBlank(rep.getName())) {
             wrapper.eq(Account::getAccountName, rep.getName());
