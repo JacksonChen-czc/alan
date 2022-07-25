@@ -11,6 +11,22 @@
     <artifactId>alan-mock-client</artifactId>
 
     <dependencies>
+        <!--引入 ContiPerf 测试工具-->
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>contiperf</artifactId>
+            <version>2.3.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>cn.chenzecheng</groupId>
+            <artifactId>alan-order-api</artifactId>
+        </dependency>
         <dependency>
             <groupId>cn.chenzecheng</groupId>
             <artifactId>alan-goods-api</artifactId>

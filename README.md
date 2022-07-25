@@ -1,31 +1,91 @@
 # alan
 以一个简单的用户故事“用户抢购商品”学习分库分表，分布式事务，分布式id等分布式技术
 
+## 技术选型
+
+| 技术                 | 名称                   | 版本     | 官网                                        |
+| -------------------- | ---------------------- | -------- | ------------------------------------------- |
+| Spring Boot          | 主框架                 | 2.4.2    | https://spring.io/projects/spring-boot      |
+| spring-cloud-alibaba |                        | 2021.1   |                                             |
+| spring-cloud         |                        | 2020.0.1 |                                             |
+| MyBatis-Plus         | ORM                    | 3.5.2    | https://mp.baomidou.com/                    |
+| Hikari               | 数据库连接池           |          | https://github.com/brettwooldridge/HikariCP |
+| Nacos                | 服务注册发现和统一配置 |          |                                             |
+| Feign                | 远程调用               |          |                                             |
+
 ## 快速开始
 
 安装mysql,redis,中间件1,2,3...
 
+### 启动数据库
+
+```dockerfile
+docker run -p 3306:3306 
+--name mysql 
+-v D:/docker-data/mysql/conf:/etc/mysql 
+-v D:/docker-data/mysql/logs:/var/log/mysql 
+-v D:/docker-data/mysql/data:/var/lib/mysql 
+-e MYSQL_ROOT_PASSWORD=123456 
+-d mysql:5.7
+```
+
+创建数据库
+
+```sql
+CREATE
+DATABASE `alan_account` CHARACTER SET 'utf8mb4';
+CREATE
+DATABASE `alan_bank` CHARACTER SET 'utf8mb4';
+CREATE
+DATABASE `alan_goods` CHARACTER SET 'utf8mb4';
+CREATE
+DATABASE `alan_order` CHARACTER SET 'utf8mb4';
+```
+
+创建数据库用户
+
+```
+# 创建用户
+create user alan@'127.0.0.1' identified by 'alan123';
+
+# 授权普通数据用户，查询、插入、更新、删除 数据库中所有表数据的权利。
+grant select, insert, update, delete on alan_account.* to alan@'127.0.0.1';
+grant select, insert, update, delete on alan_bank.* to alan@'127.0.0.1';
+grant select, insert, update, delete on alan_goods.* to alan@'127.0.0.1';
+grant select, insert, update, delete on alan_order.* to alan@'127.0.0.1';
+
+# 授权数据库开发人员，创建、修改、删除 MySQL 数据表结构权限。(可选)
+grant create on testdb.* to alan@'127.0.0.1';
+grant alter on testdb.* to alan@'127.0.0.1';
+grant drop   on testdb.* to alan@'127.0.0.1';
+```
+
 初始化数据库表，运行各个服务中的test-db-init中的测试类初始化数据。
 
-修改数据库，缓存，中间件ip，账号，密码
+### 启动nacos
 
-依次启动服务1,2,3...
+```
+docker run -it \
+-e MODE=standalone \
+--restart=always \
+--name nacos \
+-p 8848:8848 \
+nacos/nacos-server:v2.1.0-BETA
+```
+
+### 启动Redis
+
+```
+docker run -itd --name redis -p 6379:6379 redis
+```
+
+### 启动Sentinel
+
+```
+docker run --name sentinel -d -p 8858:8858 -d bladex/sentinel-dashboard
+```
 
 启动后，调用模拟客户端接口各种测试接口，查看监控系统各接口性能与资源变化
-
-
-
-## 技术选型
-
-| 技术         | 名称                   | 版本 | 官网                                        |
-| ------------ | ---------------------- | ---- | ------------------------------------------- |
-| Spring Boot  | 主框架                 |      | https://spring.io/projects/spring-boot      |
-| MyBatis-Plus | ORM                    |      | https://mp.baomidou.com/                    |
-| Hikari       | 数据库连接池           |      | https://github.com/brettwooldridge/HikariCP |
-| Nacos        | 服务注册发现和统一配置 |      |                                             |
-| Feign        | 远程调用               |      |                                             |
-
-
 
 ## 开发日志
 
@@ -45,7 +105,7 @@
 
 安装Nacos，自行百度。
 ```shell
-docker pull nacos/nacos-server
+docker pull nacos/nacos-server:v2.1.0-BETA
 // 配置数据库持久化，映射日志和数据文件
 docker run -it \
 -e MODE=standalone \
@@ -55,7 +115,7 @@ docker run -it \
 --restart=always \
 --name nacos \
 -p 8848:8848 \
-nacos/nacos-server
+nacos/nacos-server:v2.1.0-BETA
 ```
 
 踩坑：

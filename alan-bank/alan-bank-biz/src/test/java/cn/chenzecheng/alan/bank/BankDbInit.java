@@ -54,7 +54,7 @@ public class BankDbInit {
     public void insertBatch() {
         long start = System.currentTimeMillis();
         // 给所有账号初始化一个金额
-        int page = 152;
+        int page = 1;
         boolean hasNext = true;
         AccountListRep req = new AccountListRep();
         int pageSize = 10000;

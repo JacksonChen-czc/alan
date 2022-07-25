@@ -47,6 +47,15 @@ public class MyResult<T> {
     /**
      * 成功返回(用于单条)
      *
+     * @return
+     */
+    public static <T> MyResult<T> ok() {
+        return new MyResult<T>(200, "success");
+    }
+
+    /**
+     * 成功返回(用于单条)
+     *
      * @param data 响应数据
      * @return
      */

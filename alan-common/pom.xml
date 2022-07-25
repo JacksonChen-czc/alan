@@ -12,6 +12,14 @@
     <artifactId>alan-common</artifactId>
 
     <dependencies>
+        <!--devtools 热部署依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <!--optional 表示依赖是否向下传递 true表示不向下传递  默认值是false向下传递 -->
+            <optional>false</optional>
+        </dependency>
         <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-core</artifactId>

@@ -35,7 +35,6 @@
         <swagger.version>1.5.1.RELEASE</swagger.version>
         <hutool-all.version>5.6.5</hutool-all.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <bizlog-sdk.version>2.0.3</bizlog-sdk.version>
     </properties>
 
     <dependencyManagement>
