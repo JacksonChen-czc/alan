@@ -11,8 +11,6 @@ import cn.chenzecheng.alan.goods.bean.GoodsResp;
 import cn.chenzecheng.alan.mockclient.service.MockClientService;
 import cn.chenzecheng.alan.mockclient.service.SecKillService;
 import cn.chenzecheng.alan.order.RemoteOrderApi;
-import cn.chenzecheng.alan.order.bean.OrderListReq;
-import cn.chenzecheng.alan.order.bean.OrderResp;
 import cn.hutool.core.collection.CollUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +21,11 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * 模拟客户端实现
@@ -36,6 +38,9 @@ import java.util.concurrent.CountDownLatch;
 public class MockClientServiceImpl implements MockClientService {
 
     private final Random RANDOM = new Random();
+
+    @Resource(name = "secKillThreadPool")
+    private ExecutorService executorService;
 
     @Resource
     private RemoteAccountApi remoteAccountApi;
@@ -63,40 +68,45 @@ public class MockClientServiceImpl implements MockClientService {
         if (Objects.isNull(goods)) {
             return;
         }
-        CountDownLatch countDownLatch = new CountDownLatch(currentNum);
-        List<Thread> threads = Lists.newArrayList();
-        for (AccountResp account : accounts) {
-            Thread thread = new Thread(() -> {
-                countDownLatch.countDown();
-                log.info("打开页面准备抢购，用户：{}，id：{}", account.getAccountName(), account.getAccountId());
-                try {
-                    countDownLatch.await();
-                    log.info("到点开抢了，用户：{}，id：{}", account.getAccountName(), account.getAccountId());
-                    // 执行单个用户对单个商品的抢购行为（也可以提前准备好数据，用ab，jmeter，contiperf等方式测试）
-                    secKillService.doSecKill(account, goods);
-                } catch (InterruptedException e) {
-                    log.warn("countDownLatch.wait error", e);
-                    throw new RuntimeException(e);
-                }
-            });
-            thread.start();
-            threads.add(thread);
+        ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+        List<Future<Integer>> futures = Lists.newArrayList();
+        readWriteLock.writeLock().lock();
+        try {
+            for (AccountResp account : accounts) {
+                // 使用线程池或实现并发
+                Future<Integer> submit = executorService.submit(() -> {
+                    log.info("打开页面准备抢购，用户：{}，id：{}", account.getAccountName(), account.getAccountId());
+                    readWriteLock.readLock().lock();
+                    try {
+                        log.info("到点开抢了，用户：{}，id：{}", account.getAccountName(), account.getAccountId());
+                        // 执行单个用户对单个商品的抢购行为（也可以提前准备好数据，用ab，jmeter，contiperf等方式测试）
+                        secKillService.doSecKill(account, goods);
+                    } finally {
+                        readWriteLock.readLock().unlock();
+                    }
+                    return 1;
+                });
+                futures.add(submit);
+            }
+        } finally {
+            readWriteLock.writeLock().unlock();
         }
         // 子线程全部结束后，再继续主线程
-        threads.forEach(thread -> {
+        futures.forEach(future -> {
             try {
-                thread.join();
-            } catch (InterruptedException e) {
+                future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                log.warn("future.get异常", e);
                 throw new RuntimeException(e);
             }
         });
         log.info("------------- 抢购完毕，统计战绩 -------------");
         // 查询商品库存
         MyResult<GoodsResp> detail = remoteGoodsApi.detail(goods.getGoodsId());
-        // 查询订单数
-        OrderListReq orderListReq = new OrderListReq();
-        orderListReq.setGoodsId(goods.getGoodsId());
-        List<OrderResp> orderRespList = remoteOrderApi.list(orderListReq);
+        // todo 查询订单数
+//        OrderListReq orderListReq = new OrderListReq();
+//        orderListReq.setGoodsId(goods.getGoodsId());
+//        List<OrderResp> orderRespList = remoteOrderApi.list(orderListReq);
         // 核对订单和库存数扣减数量是否一致
 
     }
