@@ -1,10 +1,10 @@
 package cn.chenzecheng.alan.order;
 
-import cn.chenzecheng.alan.order.bean.OrderListReq;
-import cn.chenzecheng.alan.order.bean.OrderResp;
+import cn.chenzecheng.alan.common.bean.MyPageResult;
+import cn.chenzecheng.alan.common.bean.MyResult;
+import cn.chenzecheng.alan.order.bean.GoodsOrderListReq;
+import cn.chenzecheng.alan.order.bean.GoodsOrderResp;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
 
 /**
  * @author JacksonChen
@@ -20,7 +20,14 @@ public class RemoteOrderApiFallback implements RemoteOrderApi {
     }
 
     @Override
-    public List<OrderResp> list(OrderListReq orderListReq) {
-        return null;
+    public MyPageResult<GoodsOrderResp> goodsOrderList(GoodsOrderListReq goodsOrderListReq) {
+        log.error("获取订单列表异常", throwable);
+        return MyPageResult.error("获取订单列表异常");
+    }
+
+    @Override
+    public MyResult<Boolean> addOrder() {
+        log.error("新增订单异常", throwable);
+        return MyResult.error("新增订单异常");
     }
 }

@@ -1,6 +1,5 @@
 package cn.chenzecheng.alan.order.bean;
 
-import cn.chenzecheng.alan.common.bean.BasePageReq;
 import lombok.Data;
 
 /**
@@ -8,10 +7,20 @@ import lombok.Data;
  * @date 2022/7/25 23:45
  */
 @Data
-public class OrderListReq extends BasePageReq {
+public class GoodsOrderResp {
 
     /**
      * 商品id
      */
     private Long goodsId;
+
+    /**
+     * 商品数量
+     */
+    private int amount;
+
+    /**
+     * 订单id
+     */
+    private int orderId;
 }

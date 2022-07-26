@@ -8,6 +8,7 @@ import cn.chenzecheng.alan.common.bean.MyResult;
 import cn.chenzecheng.alan.goods.RemoteGoodsApi;
 import cn.chenzecheng.alan.goods.bean.GoodsListRep;
 import cn.chenzecheng.alan.goods.bean.GoodsResp;
+import cn.chenzecheng.alan.goods.bean.StockResp;
 import cn.chenzecheng.alan.mockclient.service.MockClientService;
 import cn.chenzecheng.alan.mockclient.service.SecKillService;
 import cn.chenzecheng.alan.order.RemoteOrderApi;
@@ -68,6 +69,7 @@ public class MockClientServiceImpl implements MockClientService {
         if (Objects.isNull(goods)) {
             return;
         }
+        log.info("商品【{}】推广秒杀，可售数量是【{}】", goods.getGoodsName(), goods.getSaleNum());
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
         List<Future<Integer>> futures = Lists.newArrayList();
         readWriteLock.writeLock().lock();
@@ -100,15 +102,26 @@ public class MockClientServiceImpl implements MockClientService {
                 throw new RuntimeException(e);
             }
         });
-        log.info("------------- 抢购完毕，统计战绩 -------------");
+        log.info("------------- 抢购完毕，检查超卖 -------------");
         // 查询商品库存
-        MyResult<GoodsResp> detail = remoteGoodsApi.detail(goods.getGoodsId());
-        // todo 查询订单数
-//        OrderListReq orderListReq = new OrderListReq();
-//        orderListReq.setGoodsId(goods.getGoodsId());
-//        List<OrderResp> orderRespList = remoteOrderApi.list(orderListReq);
-        // 核对订单和库存数扣减数量是否一致
+        MyResult<StockResp> stock = remoteGoodsApi.queryStock(goods.getGoodsId());
+        int soldNum = stock.getData().getSaleNum() - goods.getSaleNum();
 
+        // todo 查询订单数
+//        GoodsOrderListReq goodsOrderListReq = new GoodsOrderListReq();
+//        goodsOrderListReq.setGoodsId(goods.getGoodsId());
+//        // 理论上应该查询全部的该商品订单数量，实际应该不超过商品可售数量，随便查2倍数量看看有没有超卖
+//        goodsOrderListReq.setSize(goods.getSaleNum() * 2);
+//        MyPageResult<GoodsOrderResp> orderRespMyPageResult = remoteOrderApi.goodsOrderList(goodsOrderListReq);
+//        int goodsOrderAmount = orderRespMyPageResult.getData().stream().mapToInt(GoodsOrderResp::getAmount).sum();
+//
+//        // todo 核对订单和库存数扣减数量是否一致
+//        if (orderRespMyPageResult.getPage().hasNext()
+//                || goodsOrderAmount != soldNum) {
+//            log.warn("×××××××××× 卖出数量[{}]与库存扣减数量[{}]不一致。",goodsOrderAmount,soldNum);
+//        } else {
+//            log.info("√√√√√√√√√√ 卖出数量[{}]与库存扣减数量[{}]一致。",goodsOrderAmount,soldNum);
+//        }
     }
 
 
