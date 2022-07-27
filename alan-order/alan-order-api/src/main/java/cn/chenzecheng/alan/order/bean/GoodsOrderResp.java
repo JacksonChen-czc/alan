@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class GoodsOrderResp {
 
+    private Long orderGoodsId;
+
     /**
      * 商品id
      */
@@ -23,4 +25,9 @@ public class GoodsOrderResp {
      * 订单id
      */
     private int orderId;
+
+    /**
+     * 商品总价，单位：分
+     */
+    private Long goodsPriceSum;
 }

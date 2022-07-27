@@ -2,6 +2,7 @@ package cn.chenzecheng.alan.order;
 
 import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.bean.MyResult;
+import cn.chenzecheng.alan.order.bean.AddOrderReq;
 import cn.chenzecheng.alan.order.bean.GoodsOrderListReq;
 import cn.chenzecheng.alan.order.bean.GoodsOrderResp;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class RemoteOrderApiFallback implements RemoteOrderApi {
     }
 
     @Override
-    public MyResult<Boolean> addOrder() {
+    public MyResult<Boolean> addOrder(AddOrderReq req) {
         log.error("新增订单异常", throwable);
         return MyResult.error("新增订单异常");
     }

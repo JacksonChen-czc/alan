@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -35,9 +34,9 @@ public class Order implements Serializable {
     private Long accountId;
 
     /**
-     * 订单金额
+     * 订单金额，单位：分
      */
-    private BigDecimal orderPrice;
+    private Long orderPrice;
 
     /**
      * 订单状态，1已创建，2已支付，3已取消

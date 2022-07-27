@@ -66,6 +66,11 @@ public class GoodsController {
         IPage<Goods> page = new Page<>(req.getPageNo(), req.getSize());
         IPage<Goods> result = goodsService.page(page);
         List<GoodsResp> goodsResps = BeanUtil.copyToList(result.getRecords(), GoodsResp.class, CopyOptions.create());
+        goodsResps.forEach(goodsResp -> {
+            Stock stock = stockService.getById(goodsResp.getGoodsId());
+            goodsResp.setTotal(stock.getTotal());
+            goodsResp.setSaleNum(stock.getSaleNum());
+        });
         return MyPageResult.ok(goodsResps, new MyPageInfo(result.getCurrent(), result.getSize(), result.getPages(), result.getTotal()));
     }
 

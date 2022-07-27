@@ -5,6 +5,7 @@ import cn.chenzecheng.alan.account.bean.AccountListRep;
 import cn.chenzecheng.alan.account.bean.AccountResp;
 import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.exception.BizException;
+import cn.chenzecheng.alan.common.util.PriceUtil;
 import cn.chenzecheng.alan.goods.RemoteGoodsApi;
 import cn.chenzecheng.alan.goods.bean.GoodsListRep;
 import cn.chenzecheng.alan.goods.bean.GoodsResp;
@@ -19,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -66,15 +66,16 @@ public class OrderDbInit {
         AccountResp accountResp = accountResult.getData().get(0);
         Order order = new Order();
         order.setAccountId(accountResp.getAccountId());
-        order.setOrderPrice(goodsResp.getGoodsPrice());
+        order.setOrderPrice(PriceUtil.convertToLong(goodsResp.getGoodsPrice()));
         order.setOrderStatus(OrderStatusEnum.CREATED.getCode());
         orderService.save(order);
 
         OrderGoods orderGoods = new OrderGoods();
         orderGoods.setOrderId(order.getOrderId());
         orderGoods.setGoodsId(goodsResp.getGoodsId());
-        orderGoods.setAmount(1);
-        orderGoods.setGoodsPriceSum(goodsResp.getGoodsPrice().multiply(new BigDecimal(1)));
+        int amount = 1;
+        orderGoods.setAmount(amount);
+        orderGoods.setGoodsPriceSum(PriceUtil.convertToLong(goodsResp.getGoodsPrice()) * amount);
         orderGoodsService.save(orderGoods);
     }
 }

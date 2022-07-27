@@ -2,10 +2,12 @@ package cn.chenzecheng.alan.order;
 
 import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.bean.MyResult;
+import cn.chenzecheng.alan.order.bean.AddOrderReq;
 import cn.chenzecheng.alan.order.bean.GoodsOrderListReq;
 import cn.chenzecheng.alan.order.bean.GoodsOrderResp;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * 账号接口api
@@ -21,13 +23,15 @@ public interface RemoteOrderApi {
      * @param goodsOrderListReq
      * @return
      */
-    @GetMapping
-    MyPageResult<GoodsOrderResp> goodsOrderList(GoodsOrderListReq goodsOrderListReq);
+    @PostMapping("/order/goods/list")
+    MyPageResult<GoodsOrderResp> goodsOrderList(@RequestBody GoodsOrderListReq goodsOrderListReq);
 
     /**
      * 新增订单
      *
+     * @param req
      * @return
      */
-    MyResult<Boolean> addOrder();
+    @PostMapping("/order/add")
+    MyResult<Boolean> addOrder(@RequestBody AddOrderReq req);
 }

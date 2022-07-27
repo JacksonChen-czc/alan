@@ -20,6 +20,11 @@ public enum MyErrorEnum {
      * 业务异常
      */
     NOT_EXIST("NOT_EXIST", "找不到记录"),
+
+    /**
+     * 远程请求异常
+     */
+    REMOTE_ERROR("REMOTE_ERROR", "远程请求异常"),
     ;
 
     private String code;

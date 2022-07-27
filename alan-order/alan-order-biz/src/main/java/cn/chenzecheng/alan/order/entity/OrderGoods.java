@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -45,9 +44,9 @@ public class OrderGoods implements Serializable {
     private Integer amount;
 
     /**
-     * 商品总价
+     * 商品总价，单位：分
      */
-    private BigDecimal goodsPriceSum;
+    private Long goodsPriceSum;
 
     private LocalDateTime createTime;
 

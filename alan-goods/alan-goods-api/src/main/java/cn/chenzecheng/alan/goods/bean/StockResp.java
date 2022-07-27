@@ -17,10 +17,10 @@ public class StockResp {
     /**
      * 商品可售数量
      */
-    private Integer saleNum;
+    private int saleNum;
 
     /**
      * 库存总数
      */
-    private Integer total;
+    private int total;
 }
