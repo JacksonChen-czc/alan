@@ -35,20 +35,28 @@
         <swagger.version>1.5.1.RELEASE</swagger.version>
         <hutool-all.version>5.6.5</hutool-all.version>
         <slf4j.version>1.7.30</slf4j.version>
+        <shardingsphere.version>5.1.2</shardingsphere.version>
+        <redisson.version>3.17.4</redisson.version>
+        <fst.version>2.57</fst.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
-                <version>3.17.4</version>
+                <version>${redisson.version}</version>
             </dependency>
             <!-- 解决引入redisson导致的异常 -->
             <dependency>
                 <groupId>de.ruedigermoeller</groupId>
                 <artifactId>fst</artifactId>
-                <version>2.57</version>
+                <version>${fst.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.chenzecheng</groupId>
