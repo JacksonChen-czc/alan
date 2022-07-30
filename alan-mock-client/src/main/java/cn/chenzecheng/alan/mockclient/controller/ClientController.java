@@ -20,10 +20,15 @@ public class ClientController {
     @Resource
     private MockClientService mockClientService;
 
+    /**
+     * 场景一、大量用户抢购少数商品
+     *
+     * @param currentNum
+     * @return
+     */
     @GetMapping
-    public MyResult<Void> secKill(int currentNum) {
-        mockClientService.secKill(currentNum);
-        return MyResult.ok();
+    public MyResult<Boolean> secKill(int currentNum) {
+        return MyResult.ok(mockClientService.secKill(currentNum));
     }
 
 }

@@ -10,5 +10,12 @@ import cn.chenzecheng.alan.goods.bean.GoodsResp;
  * @date 2022/7/25 16:58
  */
 public interface SecKillService {
+
+    /**
+     * 用户执行秒杀操作
+     *
+     * @param account
+     * @param goods
+     */
     void doSecKill(AccountResp account, GoodsResp goods);
 }

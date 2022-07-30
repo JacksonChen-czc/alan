@@ -12,6 +12,7 @@ import cn.chenzecheng.alan.goods.bean.TryReduceStockReq;
 import cn.chenzecheng.alan.mockclient.service.SecKillService;
 import cn.chenzecheng.alan.order.RemoteOrderApi;
 import cn.chenzecheng.alan.order.bean.AddOrderReq;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
@@ -41,33 +42,56 @@ public class DefaultSecKillServiceImpl implements SecKillService {
     @Override
     public void doSecKill(AccountResp account, GoodsResp goods) {
         log.info("用户【{}】开始抢购", account.getAccountName());
-        // 获取用户详情
-        MyResult<AccountResp> detail = remoteAccountApi.detail(account.getAccountId());
-        MyAssertUtil.isResultSuc(detail);
-        AccountResp data = detail.getData();
-        // 查询库存
-        MyResult<StockResp> goodsStock = remoteGoodsApi.queryStock(goods.getGoodsId());
-        MyAssertUtil.isResultSuc(goodsStock);
-        // 如果没库存，就结束
+
+        // 获取用户详情，一般进入页面都会获取用户信息
+        AccountResp data = getAccountDetail(account);
+        log.info("当前用户详情【{}】", JSON.toJSON(data));
+
+        // 查询库存，如果没库存，就结束
+        MyResult<StockResp> goodsStock = getStock(goods);
         if (goodsStock.getData().getSaleNum() <= 0) {
             log.info("用户【{}】查询【{}】的库存为【{}】，无法抢购 。", account.getAccountName(), goods.getGoodsName(), goodsStock.getData().getSaleNum());
             return;
         }
-        // 如果有库存，扣减库存
-        TryReduceStockReq tryReduceStockReq = new TryReduceStockReq();
-        tryReduceStockReq.setGoodsId(goods.getGoodsId());
+
+        // 有库存，扣减库存
         int num = 1;
-        tryReduceStockReq.setNum(num);
-        MyResult<Boolean> reduceStockResult = remoteGoodsApi.tryReduceStock(tryReduceStockReq);
-        MyAssertUtil.isResultSuc(reduceStockResult);
-        if (!Boolean.TRUE.equals(reduceStockResult.getData())) {
+        Boolean reduceResult = tryReduceStock(goods, num);
+        if (!Boolean.TRUE.equals(reduceResult)) {
             log.info("用户【{}】扣减【{}】的库存失败，无法下单 。", account.getAccountName(), goods.getGoodsName());
             return;
         }
+
         // 扣减库存成功，则新增订单
+        addOrder(account, goods, num);
+    }
+
+    protected void addOrder(AccountResp account, GoodsResp goods, int num) {
+        // todo 可以改为投递mq，降低订单系统的并发，达到削峰的效果
         AddOrderReq addOrderReq = buildAddOrderReq(account, goods, num);
         MyResult<Boolean> addOrderResult = remoteOrderApi.addOrder(addOrderReq);
         MyAssertUtil.isResultSuc(addOrderResult);
+    }
+
+    protected Boolean tryReduceStock(GoodsResp goods, int num) {
+        TryReduceStockReq tryReduceStockReq = new TryReduceStockReq();
+        tryReduceStockReq.setGoodsId(goods.getGoodsId());
+        tryReduceStockReq.setNum(num);
+        MyResult<Boolean> reduceStockResult = remoteGoodsApi.tryReduceStock(tryReduceStockReq);
+        MyAssertUtil.isResultSuc(reduceStockResult);
+        return reduceStockResult.getData();
+    }
+
+    protected AccountResp getAccountDetail(AccountResp account) {
+        MyResult<AccountResp> detail = remoteAccountApi.detail(account.getAccountId());
+        MyAssertUtil.isResultSuc(detail);
+        return detail.getData();
+    }
+
+    protected MyResult<StockResp> getStock(GoodsResp goods) {
+        MyResult<StockResp> goodsStock = remoteGoodsApi.queryStock(goods.getGoodsId());
+        MyAssertUtil.isResultSuc(goodsStock);
+        return goodsStock;
     }
 
     private AddOrderReq buildAddOrderReq(AccountResp account, GoodsResp goods, int num) {
