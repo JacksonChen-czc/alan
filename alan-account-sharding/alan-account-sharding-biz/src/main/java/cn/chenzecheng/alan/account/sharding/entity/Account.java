@@ -1,4 +1,4 @@
-package cn.chenzecheng.alan.sharding.entity;
+package cn.chenzecheng.alan.account.sharding.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

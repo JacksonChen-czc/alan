@@ -1,4 +1,4 @@
-package cn.chenzecheng.alan.sharding.util;
+package cn.chenzecheng.alan.account.sharding.util;
 
 import java.util.HashMap;
 import java.util.Map;

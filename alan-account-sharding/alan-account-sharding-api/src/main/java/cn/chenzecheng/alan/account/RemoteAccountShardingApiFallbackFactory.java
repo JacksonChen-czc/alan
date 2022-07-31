@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
  * @date 2022/7/16 16:42
  */
 @Component
-public class RemoteAccountApiFallbackFactory implements FallbackFactory<RemoteAccountApi> {
+public class RemoteAccountShardingApiFallbackFactory implements FallbackFactory<RemoteAccountShardingApi> {
 
     @Override
-    public RemoteAccountApi create(Throwable throwable) {
-        return new RemoteAccountApiFallback(throwable);
+    public RemoteAccountShardingApi create(Throwable throwable) {
+        return new RemoteAccountShardingApiFallback(throwable);
     }
 }

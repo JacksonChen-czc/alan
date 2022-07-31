@@ -1,4 +1,4 @@
-package cn.chenzecheng.alan.sharding.config;
+package cn.chenzecheng.alan.account.sharding.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * @author JacksonChen
  */
 @Configuration
-@MapperScan("cn.chenzecheng.alan.sharding.mapper")
+@MapperScan("cn.chenzecheng.alan.account.sharding.mapper")
 public class MybatisPlusConfig {
 
     @Bean

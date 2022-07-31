@@ -101,14 +101,14 @@ docker run --name sentinel -d -p 8858:8858 -d bladex/sentinel-dashboard
 
 ## 更新日志
 
-- 安装Mysql，Redis，Nacos，Sentinel，将**服务注册**到Nacos
-- Spring Boot Admin监控服务资源
-- Sentinel实现**QPS监控**和**限流熔断**
-- Redisson实现**分布式锁**
+- 安装`Mysql`，`Redis`，`Nacos`，`Sentinel`，将**服务注册**到`Nacos`
+- `Spring Boot Admin`监控服务资源
+- `Sentinel`实现**`QPS`监控**和**限流熔断**
+- `Redisson`实现**分布式锁**
 - 实现用户**秒杀商品**的逻辑，并测试通过
-- 增加一张千万级别的账号表，并初始化1000W数据到数据库
+- 增加一张千万级别的账号表，并初始化1000 W数据到数据库
+- 增加`account_sharding`模块，整合`Sharding-JDBC`并实现**分库分表**
 
 ## 待办
 
-- （sharding-jdbc）增加账号分库分表account_sharding模块，把大数据账号表迁移过去，并实现分页查询，排序查询等
-- （Seata）使用分布式事务，实现用户付款流程
+- （`Seata`）使用分布式事务，实现用户付款流程

@@ -1,14 +1,14 @@
-package cn.chenzecheng.alan.sharding.controller;
+package cn.chenzecheng.alan.account.sharding.controller;
 
 import cn.chenzecheng.alan.account.bean.AccountListRep;
 import cn.chenzecheng.alan.account.bean.AccountResp;
+import cn.chenzecheng.alan.account.sharding.entity.Account;
+import cn.chenzecheng.alan.account.sharding.service.IAccountService;
 import cn.chenzecheng.alan.common.bean.MyPageInfo;
 import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.bean.MyResult;
 import cn.chenzecheng.alan.common.enums.MyErrorEnum;
 import cn.chenzecheng.alan.common.exception.MyAssertUtil;
-import cn.chenzecheng.alan.sharding.entity.Account;
-import cn.chenzecheng.alan.sharding.service.IAccountService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.alibaba.nacos.common.utils.StringUtils;
@@ -28,7 +28,7 @@ import java.util.List;
  * @since 2022-07-17
  */
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/account/sharding")
 public class AccountController {
 
     @Resource

@@ -94,7 +94,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.3.7.RELEASE</version>
                 <configuration>
-                    <mainClass>cn.chenzecheng.alan.sharding.AlanAccountShardingApplication</mainClass>
+                    <mainClass>cn.chenzecheng.alan.account.sharding.AlanAccountShardingApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

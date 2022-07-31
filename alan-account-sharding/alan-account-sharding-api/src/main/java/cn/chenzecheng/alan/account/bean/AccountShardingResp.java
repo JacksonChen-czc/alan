@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2022/7/18 18:01
  */
 @Data
-public class AccountResp {
+public class AccountShardingResp {
 
     /**
      * 账号id

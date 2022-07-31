@@ -1,6 +1,6 @@
-package cn.chenzecheng.alan.sharding.service;
+package cn.chenzecheng.alan.account.sharding.service;
 
-import cn.chenzecheng.alan.sharding.entity.Account;
+import cn.chenzecheng.alan.account.sharding.entity.Account;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

@@ -1,8 +1,8 @@
-package cn.chenzecheng.alan.sharding;
+package cn.chenzecheng.alan.account.sharding;
 
-import cn.chenzecheng.alan.sharding.entity.Account;
-import cn.chenzecheng.alan.sharding.service.IAccountService;
-import cn.chenzecheng.alan.sharding.util.CreatAccountUtil;
+import cn.chenzecheng.alan.account.sharding.entity.Account;
+import cn.chenzecheng.alan.account.sharding.service.IAccountService;
+import cn.chenzecheng.alan.account.sharding.util.CreatAccountUtil;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,14 +43,14 @@ public class AccountShardingDbInit {
 
     @Test
     public void batchInsertAccount() {
-        // 生成500w的账号，可以根据性能自助调整线程数量和每次生成的数量
+        // 生成1000w的账号，可以根据性能自助调整线程数量和每次生成的数量
         /* 数据库连接增加 rewriteBatchedStatements=true 参数，可以大量提升批量插入的效率，*/
         long start = System.currentTimeMillis();
         for (int i = 0; i < 1; i++) {
             int finalI = i;
             threadPool.submit(() -> {
                 long start1 = System.currentTimeMillis();
-                int size = 1;
+                int size = 10000;
                 List<Account> list = new ArrayList<>(size);
                 for (int j = 0; j < size; j++) {
                     Account account = createAccount();

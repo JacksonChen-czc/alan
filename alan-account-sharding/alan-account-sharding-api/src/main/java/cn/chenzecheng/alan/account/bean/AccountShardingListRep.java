@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class AccountListRep extends BasePageReq {
+public class AccountShardingListRep extends BasePageReq {
 
     private String name;
     private String no;

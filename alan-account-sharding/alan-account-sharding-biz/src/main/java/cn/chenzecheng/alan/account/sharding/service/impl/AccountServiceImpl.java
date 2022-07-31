@@ -1,8 +1,8 @@
-package cn.chenzecheng.alan.sharding.service.impl;
+package cn.chenzecheng.alan.account.sharding.service.impl;
 
-import cn.chenzecheng.alan.sharding.entity.Account;
-import cn.chenzecheng.alan.sharding.mapper.AccountMapper;
-import cn.chenzecheng.alan.sharding.service.IAccountService;
+import cn.chenzecheng.alan.account.sharding.entity.Account;
+import cn.chenzecheng.alan.account.sharding.mapper.AccountMapper;
+import cn.chenzecheng.alan.account.sharding.service.IAccountService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

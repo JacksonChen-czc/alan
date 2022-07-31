@@ -1,6 +1,6 @@
-package cn.chenzecheng.alan.sharding.mapper;
+package cn.chenzecheng.alan.account.sharding.mapper;
 
-import cn.chenzecheng.alan.sharding.entity.Account;
+import cn.chenzecheng.alan.account.sharding.entity.Account;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
