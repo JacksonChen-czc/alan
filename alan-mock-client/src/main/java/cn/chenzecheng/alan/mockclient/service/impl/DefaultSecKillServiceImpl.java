@@ -39,6 +39,9 @@ public class DefaultSecKillServiceImpl implements SecKillService {
     @Resource
     private RemoteOrderApi remoteOrderApi;
 
+    @Resource
+    private SecKillService secKillService;
+
     @Override
     public void doSecKill(AccountResp account, GoodsResp goods) {
         log.info("用户【{}】开始抢购", account.getAccountName());
@@ -54,6 +57,12 @@ public class DefaultSecKillServiceImpl implements SecKillService {
             return;
         }
 
+        secKillService.tryReduceStockAndAddOrder(account, goods);
+    }
+
+
+    @Override
+    public void tryReduceStockAndAddOrder(AccountResp account, GoodsResp goods) {
         // 有库存，扣减库存
         int num = 1;
         Boolean reduceResult = tryReduceStock(goods, num);
@@ -64,6 +73,7 @@ public class DefaultSecKillServiceImpl implements SecKillService {
 
         // 扣减库存成功，则新增订单
         addOrder(account, goods, num);
+        System.out.println("事务执行结束");
     }
 
     protected void addOrder(AccountResp account, GoodsResp goods, int num) {

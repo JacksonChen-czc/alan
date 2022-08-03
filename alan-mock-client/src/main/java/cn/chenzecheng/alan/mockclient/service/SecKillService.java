@@ -18,4 +18,12 @@ public interface SecKillService {
      * @param goods
      */
     void doSecKill(AccountResp account, GoodsResp goods);
+
+    /**
+     * 尝试扣减库存并下单
+     *
+     * @param account
+     * @param goods
+     */
+    void tryReduceStockAndAddOrder(AccountResp account, GoodsResp goods);
 }

@@ -29,11 +29,23 @@
 - 启动账号服务，商品服务，订单服务，银行服务
 - 启动模拟客户端服务，调用模拟客户端服务的接口，进行系统测试。
 
+### 创建docker桥接网络
+
+因为需要容器间访问，所以需要搭建一个容器桥接网络
+
+```shell
+docker network create mybridge 
+```
+
 ### 启动数据库
 
-```dockerfile
+启动数据库，并连接上桥接网络。
+
+```shell
 docker run -p 3306:3306 
 --name mysql 
+--network mybridge 
+--network-alias mysql 
 -v D:/docker-data/mysql/conf:/etc/mysql 
 -v D:/docker-data/mysql/logs:/var/log/mysql 
 -v D:/docker-data/mysql/data:/var/lib/mysql 
@@ -56,7 +68,7 @@ DATABASE `alan_order` CHARACTER SET 'utf8mb4';
 
 创建数据库用户
 
-```
+```mysql
 # 创建用户
 create user alan@'127.0.0.1' identified by 'alan123';
 
@@ -76,13 +88,13 @@ grant drop   on testdb.* to alan@'127.0.0.1';
 
 ### 启动Redis
 
-```
+```shell
 docker run -itd --name redis -p 6379:6379 redis
 ```
 
 ### 启动nacos
 
-```
+```shell
 docker run -it \
 -e MODE=standalone \
 --restart=always \
@@ -93,8 +105,23 @@ nacos/nacos-server:v2.1.0-BETA
 
 ### 启动Sentinel
 
-```
+```shell
 docker run --name sentinel -d -p 8858:8858 -d bladex/sentinel-dashboard
+```
+
+### 启动Seata
+
+配置请过程自行参考[Seata官方文档](https://seata.io/zh-cn/docs/ops/deploy-guide-beginner.html)
+
+```shell
+docker run -d 
+--name seata-server 
+--network mybridge 
+--network-alias seata-server 
+-p 18091:8091 
+-p 17091:7091 
+-v D:/docker-data/seata/resources:/seata-server/resources 
+seataio/seata-server:1.5.2
 ```
 
 启动后，调用模拟客户端接口各种测试接口，查看监控系统各接口性能与资源变化
