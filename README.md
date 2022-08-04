@@ -96,9 +96,11 @@ docker run -itd --name redis -p 6379:6379 redis
 
 ```shell
 docker run -it \
--e MODE=standalone \
 --restart=always \
 --name nacos \
+--network mybridge \
+--network-alias nacos \
+-e MODE=standalone \
 -p 8848:8848 \
 nacos/nacos-server:v2.1.0-BETA
 ```
