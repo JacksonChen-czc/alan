@@ -29,60 +29,37 @@
 - 启动账号服务，商品服务，订单服务，银行服务
 - 启动模拟客户端服务，调用模拟客户端服务的接口，进行系统测试。
 
-### 创建docker桥接网络
-
-因为需要容器间访问，所以需要搭建一个容器桥接网络
-
-```shell
-docker network create mybridge 
-```
-
 ### 启动数据库
 
-启动数据库，并连接上桥接网络。
+启动数据库
 
 ```shell
-docker run -p 3306:3306 
---name mysql 
---network mybridge 
---network-alias mysql 
--v D:/docker-data/mysql/conf:/etc/mysql 
--v D:/docker-data/mysql/logs:/var/log/mysql 
--v D:/docker-data/mysql/data:/var/lib/mysql 
--e MYSQL_ROOT_PASSWORD=123456 
--d mysql:5.7
+# 启动原始容器
+docker run -d \
+-p 3306:3306 \
+--name mysql \
+-e MYSQL_ROOT_PASSWORD=123456 \
+mysql:5.7
+# 拷贝配置和数据
+docker cp mysql:/etc/mysql /home/docker/conf
+docker cp mysql:/var/log /home/docker/mysql/logs
+docker cp mysql:/var/lib/mysql /home/docker/mysql/data
+# 删除原始容器
+docker rm -f mysql
+# 启动容器挂载配置和数据
+docker run -d \
+-p 3306:3306 \
+--name mysql \
+-v /home/docker/mysql/conf:/etc/mysql \
+-v /home/docker/mysql/logs:/var/log/mysql \
+-v /home/docker/mysql/data:/var/lib/mysql \
+-e MYSQL_ROOT_PASSWORD=123456 \
+mysql:5.7
 ```
 
-创建数据库
+创建数据库表
 
-```sql
-CREATE
-DATABASE `alan_account` CHARACTER SET 'utf8mb4';
-CREATE
-DATABASE `alan_bank` CHARACTER SET 'utf8mb4';
-CREATE
-DATABASE `alan_goods` CHARACTER SET 'utf8mb4';
-CREATE
-DATABASE `alan_order` CHARACTER SET 'utf8mb4';
-```
-
-创建数据库用户
-
-```mysql
-# 创建用户
-create user alan@'127.0.0.1' identified by 'alan123';
-
-# 授权普通数据用户，查询、插入、更新、删除 数据库中所有表数据的权利。
-grant select, insert, update, delete on alan_account.* to alan@'127.0.0.1';
-grant select, insert, update, delete on alan_bank.* to alan@'127.0.0.1';
-grant select, insert, update, delete on alan_goods.* to alan@'127.0.0.1';
-grant select, insert, update, delete on alan_order.* to alan@'127.0.0.1';
-
-# 授权数据库开发人员，创建、修改、删除 MySQL 数据表结构权限。(可选)
-grant create on testdb.* to alan@'127.0.0.1';
-grant alter on testdb.* to alan@'127.0.0.1';
-grant drop   on testdb.* to alan@'127.0.0.1';
-```
+- 执行`dbsql`里的脚本
 
 初始化数据库表，运行各个服务中的test-db-init中的测试类初始化数据。
 
@@ -94,18 +71,24 @@ docker run -itd --name redis -p 6379:6379 redis
 
 ### 启动nacos
 
+注册中心和配置中心。
+
+这里只是把配置缓存到容器中，如果想要持久化到数据库，请自行查阅官方文档
+
 ```shell
-docker run -it \
---restart=always \
+docker run -d \
 --name nacos \
---network mybridge \
---network-alias nacos \
 -e MODE=standalone \
+-p 7848:7848 \
 -p 8848:8848 \
+-p 9848:9848 \
+-p 9849:9849 \
 nacos/nacos-server:v2.1.0-BETA
 ```
 
 ### 启动Sentinel
+
+监控性能用。
 
 ```shell
 docker run --name sentinel -d -p 8858:8858 -d bladex/sentinel-dashboard
@@ -116,13 +99,26 @@ docker run --name sentinel -d -p 8858:8858 -d bladex/sentinel-dashboard
 配置请过程自行参考[Seata官方文档](https://seata.io/zh-cn/docs/ops/deploy-guide-beginner.html)
 
 ```shell
-docker run -d 
---name seata-server 
---network mybridge 
---network-alias seata-server 
--p 18091:8091 
--p 17091:7091 
--v D:/docker-data/seata/resources:/seata-server/resources 
+docker run -d \
+--name seata-server \
+-p 8091:8091 \
+-p 7091:7091 \
+seataio/seata-server:1.5.2
+
+docker cp seata-server:/seata-server/resources /home/docker/seata/resources
+docker rm -f seata-server
+
+# SEATA_IP配置宿主机ip，防止注册nacos时是容器ip，导致本地服务无法调用
+# NACOS_IP、MYSQL_IP配置中自定义的环境配置，用于seata访问mysql和nacos
+# 配置文件中的配置可以用占位符+环境变量，但是放在nacos的配置不行，必须直接写真实值
+docker run -d \
+--name seata-server \
+-e SEATA_IP=192.168.31.63 \
+-e MYSQL_IP=192.168.31.63 \
+-e NACOS_IP=192.168.31.63 \
+-p 8091:8091 \
+-p 7091:7091 \
+-v /home/docker/seata/resources:/seata-server/resources  \
 seataio/seata-server:1.5.2
 ```
 

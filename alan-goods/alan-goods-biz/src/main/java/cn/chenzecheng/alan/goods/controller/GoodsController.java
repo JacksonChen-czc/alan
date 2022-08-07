@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.springframework.beans.BeanUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -81,6 +82,7 @@ public class GoodsController {
     }
 
     @PostMapping("/stock/try-reduce")
+    @Transactional(rollbackFor = Exception.class)
     public MyResult<Boolean> tryReduceStock(@RequestBody TryReduceStockReq req) {
         // 线程安全地扣减库存
         RLock lock = redissonUtil.getRedisLock(req.getGoodsId().toString());

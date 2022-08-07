@@ -1,0 +1,12 @@
+CREATE
+DATABASE `alan_account` CHARACTER SET 'utf8mb4';
+CREATE
+DATABASE `alan_account_00` CHARACTER SET 'utf8mb4';
+CREATE
+DATABASE `alan_account_01` CHARACTER SET 'utf8mb4';
+CREATE
+DATABASE `alan_bank` CHARACTER SET 'utf8mb4';
+CREATE
+DATABASE `alan_goods` CHARACTER SET 'utf8mb4';
+CREATE
+DATABASE `alan_order` CHARACTER SET 'utf8mb4';

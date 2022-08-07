@@ -13,6 +13,7 @@ import cn.chenzecheng.alan.mockclient.service.SecKillService;
 import cn.chenzecheng.alan.order.RemoteOrderApi;
 import cn.chenzecheng.alan.order.bean.AddOrderReq;
 import com.alibaba.fastjson.JSON;
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,7 @@ public class DefaultSecKillServiceImpl implements SecKillService {
 
 
     @Override
+    @GlobalTransactional
     public void tryReduceStockAndAddOrder(AccountResp account, GoodsResp goods) {
         // 有库存，扣减库存
         int num = 1;
@@ -73,7 +75,6 @@ public class DefaultSecKillServiceImpl implements SecKillService {
 
         // 扣减库存成功，则新增订单
         addOrder(account, goods, num);
-        System.out.println("事务执行结束");
     }
 
     protected void addOrder(AccountResp account, GoodsResp goods, int num) {
