@@ -1,6 +1,6 @@
 package cn.chenzecheng.alan.account.sharding.controller;
 
-import cn.chenzecheng.alan.account.bean.AccountListRep;
+import cn.chenzecheng.alan.account.bean.AccountListReq;
 import cn.chenzecheng.alan.account.bean.AccountResp;
 import cn.chenzecheng.alan.account.sharding.entity.Account;
 import cn.chenzecheng.alan.account.sharding.service.IAccountService;
@@ -11,6 +11,7 @@ import cn.chenzecheng.alan.common.enums.MyErrorEnum;
 import cn.chenzecheng.alan.common.exception.MyAssertUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.nacos.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -43,19 +44,22 @@ public class AccountController {
     }
 
     @PostMapping("/list")
-    public MyPageResult<AccountResp> list(@RequestBody AccountListRep rep) {
+    public MyPageResult<AccountResp> list(@RequestBody AccountListReq req) {
 //        RandomExceptionUtil.randomExAndSleep();
         LambdaQueryWrapper<Account> wrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.isNotBlank(rep.getName())) {
-            wrapper.eq(Account::getAccountName, rep.getName());
+        if (StringUtils.isNotBlank(req.getName())) {
+            wrapper.eq(Account::getAccountName, req.getName());
         }
-        if (StringUtils.isNotBlank(rep.getNo())) {
-            wrapper.eq(Account::getAccountNo, rep.getNo());
+        if (StringUtils.isNotBlank(req.getNo())) {
+            wrapper.eq(Account::getAccountNo, req.getNo());
         }
-        if (StringUtils.isNotBlank(rep.getMobile())) {
-            wrapper.eq(Account::getAccountMobile, rep.getMobile());
+        if (StringUtils.isNotBlank(req.getMobile())) {
+            wrapper.eq(Account::getAccountMobile, req.getMobile());
         }
-        Page<Account> page = new Page<>(rep.getPageNo(), rep.getSize());
+        if (CollUtil.isNotEmpty(req.getAccountIds())) {
+            wrapper.in(Account::getAccountId, req.getAccountIds());
+        }
+        Page<Account> page = new Page<>(req.getPageNo(), req.getSize());
         Page<Account> pageResult = accountService.page(page, wrapper);
         MyPageInfo pageInfo = new MyPageInfo(pageResult.getCurrent(), pageResult.getSize(), pageResult.getPages(), pageResult.getTotal());
         List<AccountResp> accountRespList = BeanUtil.copyToList(pageResult.getRecords(), AccountResp.class, CopyOptions.create());

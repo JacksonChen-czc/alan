@@ -1,7 +1,7 @@
 package cn.chenzecheng.alan.order;
 
 import cn.chenzecheng.alan.account.RemoteAccountApi;
-import cn.chenzecheng.alan.account.bean.AccountListRep;
+import cn.chenzecheng.alan.account.bean.AccountListReq;
 import cn.chenzecheng.alan.account.bean.AccountResp;
 import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.exception.BizException;
@@ -52,7 +52,7 @@ public class OrderDbInit {
 
     @Test
     public void insert() {
-        MyPageResult<AccountResp> accountResult = remoteAccountApi.list(new AccountListRep());
+        MyPageResult<AccountResp> accountResult = remoteAccountApi.list(new AccountListReq());
         if (CollUtil.isEmpty(accountResult.getData())) {
             log.warn("请先初始化账号数据");
             throw new BizException("请先初始化账号数据");

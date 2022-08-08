@@ -1,6 +1,6 @@
 package cn.chenzecheng.alan.account;
 
-import cn.chenzecheng.alan.account.bean.AccountListRep;
+import cn.chenzecheng.alan.account.bean.AccountListReq;
 import cn.chenzecheng.alan.account.bean.AccountResp;
 import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.bean.MyResult;
@@ -26,7 +26,7 @@ public class RemoteAccountApiFallback implements RemoteAccountApi {
     }
 
     @Override
-    public MyPageResult<AccountResp> list(AccountListRep rep) {
+    public MyPageResult<AccountResp> list(AccountListReq rep) {
         log.error("获取账号列表异常", throwable);
         return MyPageResult.error("获取账号列表异常");
     }

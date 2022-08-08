@@ -1,6 +1,6 @@
 package cn.chenzecheng.alan.account;
 
-import cn.chenzecheng.alan.account.bean.AccountListRep;
+import cn.chenzecheng.alan.account.bean.AccountListReq;
 import cn.chenzecheng.alan.account.bean.AccountResp;
 import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.bean.MyResult;
@@ -34,5 +34,5 @@ public interface RemoteAccountApi {
      * @return
      */
     @PostMapping("/account/list")
-    MyPageResult<AccountResp> list(@RequestBody AccountListRep rep);
+    MyPageResult<AccountResp> list(@RequestBody AccountListReq rep);
 }

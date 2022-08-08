@@ -1,7 +1,7 @@
 package cn.chenzecheng.alan.mockclient.service.impl;
 
 import cn.chenzecheng.alan.account.RemoteAccountApi;
-import cn.chenzecheng.alan.account.bean.AccountListRep;
+import cn.chenzecheng.alan.account.bean.AccountListReq;
 import cn.chenzecheng.alan.account.bean.AccountResp;
 import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.bean.MyResult;
@@ -11,6 +11,7 @@ import cn.chenzecheng.alan.goods.bean.GoodsListRep;
 import cn.chenzecheng.alan.goods.bean.GoodsResp;
 import cn.chenzecheng.alan.goods.bean.StockResp;
 import cn.chenzecheng.alan.mockclient.service.MockClientService;
+import cn.chenzecheng.alan.mockclient.service.PayService;
 import cn.chenzecheng.alan.mockclient.service.SecKillService;
 import cn.chenzecheng.alan.mockclient.util.ConcurrentUtil;
 import cn.chenzecheng.alan.order.RemoteOrderApi;
@@ -19,6 +20,7 @@ import cn.chenzecheng.alan.order.bean.GoodsOrderResp;
 import cn.hutool.core.collection.CollUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -54,6 +56,9 @@ public class MockClientServiceImpl implements MockClientService {
     @Resource
     private SecKillService secKillService;
 
+    @Resource
+    private PayService payService;
+
     @SneakyThrows
     @Override
     public boolean secKill(int currentNum) {
@@ -86,6 +91,38 @@ public class MockClientServiceImpl implements MockClientService {
         }
     }
 
+    @Override
+    public boolean pay(int currentNum) {
+        // 查询大量用户，模拟大批用户同时操作（并发度可以配置）
+        List<AccountResp> accounts = getAccountsHasOrder(currentNum);
+
+        // todo 查询订单并支付，如果余额不足，则取消订单，归还库存
+        BiConsumer<AccountResp, Void> consumer = (aAccount, aNull) -> payService.doPay(aAccount, aNull);
+        ConcurrentUtil.concurrentConsume(accounts, null, consumer, executorService);
+
+        // todo 检查用户支付金额，与结算金额是否匹配
+
+        return false;
+    }
+
+    private List<AccountResp> getAccountsHasOrder(int currentNum) {
+        // todo 查询有待支付订单的用户
+        return Lists.newArrayList();
+    }
+
+    private List<AccountResp> getAccounts(Integer num) {
+        AccountListReq remoteReq = new AccountListReq();
+        remoteReq.setSize(num);
+        remoteReq.setPageNo(1);
+        MyPageResult<AccountResp> list = remoteAccountApi.list(remoteReq);
+        if (CollUtil.isEmpty(list.getData())) {
+            log.warn("找不到用户 randomInt:[{}]", num);
+            throw new BizException("找不到用户");
+        }
+        log.info("商城同时来了{}个用户", num);
+        return list.getData();
+    }
+
     private MyPageResult<GoodsOrderResp> getGoodsOrders(GoodsResp goods) {
         GoodsOrderListReq goodsOrderListReq = new GoodsOrderListReq();
         goodsOrderListReq.setGoodsId(goods.getGoodsId());
@@ -110,23 +147,10 @@ public class MockClientServiceImpl implements MockClientService {
         return goods;
     }
 
-    private List<AccountResp> getAccounts(Integer num) {
-        AccountListRep remoteReq = new AccountListRep();
-        remoteReq.setSize(num);
-        remoteReq.setPageNo(1);
-        MyPageResult<AccountResp> list = remoteAccountApi.list(remoteReq);
-        if (CollUtil.isEmpty(list.getData())) {
-            log.warn("找不到用户 randomInt:[{}]", num);
-            throw new BizException("找不到用户");
-        }
-        log.info("商城同时来了{}个用户", num);
-        return list.getData();
-    }
-
     private AccountResp getRandomAccount() {
         int randomInt = RANDOM.nextInt(1000000);
         log.info("调用MockClientServiceImpl.secKill randomInt:[{}]", randomInt);
-        AccountListRep remoteReq = new AccountListRep();
+        AccountListReq remoteReq = new AccountListReq();
         remoteReq.setSize(1);
         remoteReq.setPageNo(randomInt);
         MyPageResult<AccountResp> list = remoteAccountApi.list(remoteReq);

@@ -1,7 +1,7 @@
 package cn.chenzecheng.alan.bank;
 
 import cn.chenzecheng.alan.account.RemoteAccountApi;
-import cn.chenzecheng.alan.account.bean.AccountListRep;
+import cn.chenzecheng.alan.account.bean.AccountListReq;
 import cn.chenzecheng.alan.account.bean.AccountResp;
 import cn.chenzecheng.alan.bank.entity.BankAccount;
 import cn.chenzecheng.alan.bank.service.IBankAccountService;
@@ -56,7 +56,7 @@ public class BankDbInit {
         // 给所有账号初始化一个金额
         int page = 1;
         boolean hasNext = true;
-        AccountListRep req = new AccountListRep();
+        AccountListReq req = new AccountListReq();
         int pageSize = 10000;
         req.setSize(pageSize);
 

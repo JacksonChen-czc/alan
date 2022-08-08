@@ -36,3 +36,7 @@ CREATE TABLE `t_bank_account`
   ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+# 初始化结算账户
+INSERT INTO `alan_bank`.`t_bank_account`(`bank_account_id`, `account_id`, `banlance`)
+VALUES (100000, 100000, 0);

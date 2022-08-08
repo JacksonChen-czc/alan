@@ -17,4 +17,6 @@ public interface MockClientService {
      * @param currentNum
      */
     boolean secKill(int currentNum);
+
+    boolean pay(int currentNum);
 }

@@ -1,5 +1,6 @@
 package cn.chenzecheng.alan.mockclient.util;
 
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 
@@ -31,6 +32,10 @@ public class ConcurrentUtil {
      * @param <D>             consumer的第二个参数
      */
     public static <T, D> void concurrentConsume(List<T> paramTs, D paramD, BiConsumer<T, D> consumer, ExecutorService executorService) {
+        if (CollUtil.isEmpty(paramTs)) {
+            log.warn("paramTs must not be empty.");
+            return;
+        }
         ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
         List<Future<Integer>> futures = Lists.newArrayList();
         readWriteLock.writeLock().lock();

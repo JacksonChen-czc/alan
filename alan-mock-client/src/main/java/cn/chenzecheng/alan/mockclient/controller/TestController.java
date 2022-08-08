@@ -1,7 +1,7 @@
 package cn.chenzecheng.alan.mockclient.controller;
 
 import cn.chenzecheng.alan.account.RemoteAccountApi;
-import cn.chenzecheng.alan.account.bean.AccountListRep;
+import cn.chenzecheng.alan.account.bean.AccountListReq;
 import cn.chenzecheng.alan.account.bean.AccountResp;
 import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.bean.MyResult;
@@ -45,7 +45,7 @@ public class TestController {
 
     @GetMapping("/account")
     public MyPageResult<AccountResp> feign(int size) {
-        AccountListRep rep = new AccountListRep();
+        AccountListReq rep = new AccountListReq();
         rep.setSize(size);
         MyPageResult<AccountResp> result = remoteAccountApi.list(rep);
         List<AccountResp> data = result.getData();

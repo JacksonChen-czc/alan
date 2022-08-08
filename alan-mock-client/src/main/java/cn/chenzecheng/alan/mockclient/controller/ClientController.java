@@ -22,6 +22,7 @@ public class ClientController {
 
     /**
      * 场景:大量用户抢购少数商品
+     * 技术：Redisson分布式锁
      *
      * @param currentNum
      * @return
@@ -29,6 +30,18 @@ public class ClientController {
     @GetMapping("/sec-kill")
     public MyResult<Boolean> secKill(int currentNum) {
         return MyResult.ok(mockClientService.secKill(currentNum));
+    }
+
+    /**
+     * 场景:用户支付
+     * 技术：Seata分布式事务
+     *
+     * @param currentNum
+     * @return
+     */
+    @GetMapping("/pay")
+    public MyResult<Boolean> pay(int currentNum) {
+        return MyResult.ok(mockClientService.pay(currentNum));
     }
 
 }

@@ -13,7 +13,6 @@ import cn.chenzecheng.alan.mockclient.service.SecKillService;
 import cn.chenzecheng.alan.order.RemoteOrderApi;
 import cn.chenzecheng.alan.order.bean.AddOrderReq;
 import com.alibaba.fastjson.JSON;
-import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class DefaultSecKillServiceImpl implements SecKillService {
+public class SecKillServiceImpl implements SecKillService {
 
     @Resource
     private RemoteAccountApi remoteAccountApi;
@@ -39,9 +38,6 @@ public class DefaultSecKillServiceImpl implements SecKillService {
 
     @Resource
     private RemoteOrderApi remoteOrderApi;
-
-    @Resource
-    private SecKillService secKillService;
 
     @Override
     public void doSecKill(AccountResp account, GoodsResp goods) {
@@ -57,14 +53,7 @@ public class DefaultSecKillServiceImpl implements SecKillService {
             log.info("用户【{}】查询【{}】的库存为【{}】，无法抢购 。", account.getAccountName(), goods.getGoodsName(), goodsStock.getData().getSaleNum());
             return;
         }
-        // 扣减库存，增加订单
-        secKillService.tryReduceStockAndAddOrder(account, goods);
-    }
-
-    @GlobalTransactional
-    @Override
-    public void tryReduceStockAndAddOrder(AccountResp account, GoodsResp goods) {
-        // 有库存，扣减库存
+        // 有库存，扣减库存（分布式锁）
         int num = 1;
         Boolean reduceResult = tryReduceStock(goods, num);
         if (!Boolean.TRUE.equals(reduceResult)) {
@@ -74,7 +63,6 @@ public class DefaultSecKillServiceImpl implements SecKillService {
 
         // 扣减库存成功，则新增订单
         addOrder(account, goods, num);
-        System.out.println("aaa");
     }
 
     protected void addOrder(AccountResp account, GoodsResp goods, int num) {
