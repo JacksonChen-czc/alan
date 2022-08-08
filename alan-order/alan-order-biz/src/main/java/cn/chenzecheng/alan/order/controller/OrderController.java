@@ -2,6 +2,7 @@ package cn.chenzecheng.alan.order.controller;
 
 import cn.chenzecheng.alan.common.bean.MyResult;
 import cn.chenzecheng.alan.common.exception.MyAssertUtil;
+import cn.chenzecheng.alan.common.util.RandomExceptionUtil;
 import cn.chenzecheng.alan.order.bean.AddOrderReq;
 import cn.chenzecheng.alan.order.entity.Order;
 import cn.chenzecheng.alan.order.entity.OrderGoods;
@@ -39,6 +40,8 @@ public class OrderController {
     @PostMapping("/add")
     @Transactional(rollbackFor = Exception.class)
     public MyResult<Boolean> addOrder(@RequestBody AddOrderReq req) {
+        // 随机异常和延迟
+        RandomExceptionUtil.randomExAndSleep();
         Order order = new Order();
         order.setAccountId(req.getAccountId());
         order.setOrderStatus(OrderStatusEnum.CREATED.getCode());

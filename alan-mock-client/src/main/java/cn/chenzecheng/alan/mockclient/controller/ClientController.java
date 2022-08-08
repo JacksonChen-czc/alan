@@ -21,12 +21,12 @@ public class ClientController {
     private MockClientService mockClientService;
 
     /**
-     * 场景一、大量用户抢购少数商品
+     * 场景:大量用户抢购少数商品
      *
      * @param currentNum
      * @return
      */
-    @GetMapping
+    @GetMapping("/sec-kill")
     public MyResult<Boolean> secKill(int currentNum) {
         return MyResult.ok(mockClientService.secKill(currentNum));
     }

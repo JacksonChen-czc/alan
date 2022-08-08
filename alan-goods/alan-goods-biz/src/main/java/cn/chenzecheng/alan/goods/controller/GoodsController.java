@@ -5,6 +5,7 @@ import cn.chenzecheng.alan.common.bean.MyPageResult;
 import cn.chenzecheng.alan.common.bean.MyResult;
 import cn.chenzecheng.alan.common.enums.MyErrorEnum;
 import cn.chenzecheng.alan.common.exception.MyAssertUtil;
+import cn.chenzecheng.alan.common.util.RandomExceptionUtil;
 import cn.chenzecheng.alan.common.util.RedissonUtil;
 import cn.chenzecheng.alan.goods.bean.GoodsListRep;
 import cn.chenzecheng.alan.goods.bean.GoodsResp;
@@ -84,6 +85,8 @@ public class GoodsController {
     @PostMapping("/stock/try-reduce")
     @Transactional(rollbackFor = Exception.class)
     public MyResult<Boolean> tryReduceStock(@RequestBody TryReduceStockReq req) {
+        // 随机异常和延迟
+        RandomExceptionUtil.randomExAndSleep();
         // 线程安全地扣减库存
         RLock lock = redissonUtil.getRedisLock(req.getGoodsId().toString());
         lock.lock();

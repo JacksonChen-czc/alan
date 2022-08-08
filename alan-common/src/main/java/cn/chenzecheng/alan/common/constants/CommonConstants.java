@@ -12,5 +12,5 @@ public class CommonConstants {
 
     public static final int RANDOM_SLEEP_RATIO = 1;
 
-    public static final int RANDOM_SLEEP_TIME = 500;
+    public static final int RANDOM_SLEEP_TIME = 1000;
 }

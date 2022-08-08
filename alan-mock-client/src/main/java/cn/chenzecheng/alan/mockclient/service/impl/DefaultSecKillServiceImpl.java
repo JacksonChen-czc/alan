@@ -57,13 +57,12 @@ public class DefaultSecKillServiceImpl implements SecKillService {
             log.info("用户【{}】查询【{}】的库存为【{}】，无法抢购 。", account.getAccountName(), goods.getGoodsName(), goodsStock.getData().getSaleNum());
             return;
         }
-
+        // 扣减库存，增加订单
         secKillService.tryReduceStockAndAddOrder(account, goods);
     }
 
-
-    @Override
     @GlobalTransactional
+    @Override
     public void tryReduceStockAndAddOrder(AccountResp account, GoodsResp goods) {
         // 有库存，扣减库存
         int num = 1;
@@ -75,10 +74,10 @@ public class DefaultSecKillServiceImpl implements SecKillService {
 
         // 扣减库存成功，则新增订单
         addOrder(account, goods, num);
+        System.out.println("aaa");
     }
 
     protected void addOrder(AccountResp account, GoodsResp goods, int num) {
-        // todo 可以改为投递mq，降低订单系统的并发，达到削峰的效果
         AddOrderReq addOrderReq = buildAddOrderReq(account, goods, num);
         MyResult<Boolean> addOrderResult = remoteOrderApi.addOrder(addOrderReq);
         MyAssertUtil.isResultSuc(addOrderResult);

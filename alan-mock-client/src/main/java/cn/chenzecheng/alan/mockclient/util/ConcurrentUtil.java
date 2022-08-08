@@ -59,7 +59,7 @@ public class ConcurrentUtil {
                 future.get();
             } catch (InterruptedException | ExecutionException e) {
                 log.warn("future.get异常", e);
-                throw new RuntimeException(e);
+//                throw new RuntimeException(e);
             }
         });
     }
